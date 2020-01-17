@@ -1,0 +1,17 @@
+.mf-form-wrapper {
+    margin: 20px 0 20px 0px;
+}
+
+.mf-form-wrapper .mf-input {
+    margin: 10px 0 10px 0;
+}
+
+.mf-form-wrapper .mf-shortcode {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.mf-form-wrapper .mf-input-shortcode {
+    background-color: transparent;
+    width: 100%;
+}
