@@ -38,7 +38,7 @@ class DB_WP_Widget extends WP_Widget
 
         // If options are not set use default URLs
         $loaderURL = !empty($loaderURLCurrent) ? $loaderURLCurrent : DATABLOCKS_DEFAULT_LOADER_URL;
-        $datablocksURL = !empty($datablocksCurrent) ? $datablocksURLCurrent : DATABLOCKS_DEFAULT_URL;
+        $datablocksURL = !empty($datablocksURLCurrent) ? $datablocksURLCurrent : DATABLOCKS_DEFAULT_URL;
 
         echo '
         <script>
