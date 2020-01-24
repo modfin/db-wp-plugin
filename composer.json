@@ -1,0 +1,21 @@
+{
+    "name": "modfin/db-wp-plugin",
+    "type": "wordpress-plugin",
+    "require": {
+      "composer/installers": ">=1.0.6",
+      "php": ">=7.0.0"
+    },
+
+    "description": "A wordpress plugin for MFN integrations",
+    "keywords": [],
+    "homepage": "https://github.com/modfin/db-wp-plugin",
+    "license": "MIT",
+    "authors": [
+      {
+        "name": "Alexander Forrest",
+        "email": "alexander.forrest@modularfinance.se",
+        "homepage": "https://www.alexdev.se",
+        "role": "Developer"
+      }
+    ]
+  }
