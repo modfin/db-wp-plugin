@@ -20,7 +20,10 @@ class DB_WP_Widget_Admin {
 
 		$this->pageTitle = 'MF Datablocks WP Widget';
 		$this->optionsGroup = 'mf_widget_options';
-		$this->pageDesc = 'On this page you are able to change the URL settings for the MF Datablocks WP Widget.';
+		$this->pageDesc = 'On this page it is possible to update the URL settings for the ' . $this->pageTitle . '.';
+
+		$this->datablocks_url_label = 'Datablocks URL';
+		$this->loader_url_label = 'JS Loader URL';
 
 		add_action( 'admin_menu', array( $this, 'register_mfdb_widget_options_menu' ) );
 		add_action( 'admin_init',  array( $this, 'init_mfdb_widget_options' ) );
@@ -60,13 +63,13 @@ class DB_WP_Widget_Admin {
 						<th scope="row">Default URL settings</th>
 						<td>
 							<p>
-								Datablocks URL:
+								' . $this->datablocks_url_label . '
 								<code>
 									' . $this->datablocksDefaultURL . '
 								</code>
 							</p>
 							<p>
-								JS Loader URL:
+								' . $this->loader_url_label . '
 								<code>
 									' . $this->loaderDefaultURL . '
 								</code>
@@ -104,7 +107,7 @@ class DB_WP_Widget_Admin {
 
 		add_settings_field(
 			'datablocks_url_option',
-			'Datablocks URL',
+			$this->datablocks_url_label,
 			array( $this, 'datablocks_url_cb'),
 			'mfdb_widget_settings_group',
 			'mfdb_widget_setting_section'
@@ -112,7 +115,7 @@ class DB_WP_Widget_Admin {
 
 		add_settings_field(
 			'url_loader_option',
-			'Loader URL',
+			$this->loader_url_label,
 			array( $this, 'loader_url_cb'),
 			'mfdb_widget_settings_group',
 			'mfdb_widget_setting_section'
@@ -125,7 +128,7 @@ class DB_WP_Widget_Admin {
 		echo '
 			<input type="text" class="regular-text ltr" id="datablocks_url_option" placeholder="'. $this->datablocksDefaultURL . '" name="mfdb_widget_options[datablocks_url_option]" value="' . get_option( 'mfdb_widget_options' )['datablocks_url_option'] . '" />
 			<p class="description" id="loader-url-description">
-				Here you can change the Datablocks URL.
+				Here you can update the ' . $this->datablocks_url_label . '.
 			</p>
 		';
 	}
@@ -135,7 +138,7 @@ class DB_WP_Widget_Admin {
 		echo '
 			<input type="text" class="regular-text ltr" id="loader_url_option" placeholder="'. $this->loaderDefaultURL . '" name="mfdb_widget_options[loader_url_option]" value="' . get_option( 'mfdb_widget_options' )['loader_url_option'] . '" />
 			<p class="description" id="loader-url-description">
-			Here you can change the JS Loader URL.
+				Here you can update the ' . $this->loader_url_label . '.
 			</p>
 		';
 	}

@@ -71,17 +71,17 @@ class DB_WP_Widget extends WP_Widget
     // Widget frontend
     public function widget($args, $instance)
     {
-        $name = $instance['name'] !== "" ? $instance['name'] : 'mfdb';
+        $type = $instance['type'] !== "" ? $instance['type'] : 'mfdb';
 
         $date = mt_rand(1, time());
-        $elementId = "widget-" . $name . "-" . $date;
+        $elementId = "widget-" . $type . "-" . $date;
 
         $widget = new stdClass();
 
         $widget->query = '#' . $elementId;
-        $widget->widget = $instance['name'];
+        $widget->widget = $instance['type'];
         $widget->locale = $instance['locale'];
-        $widget->c = $instance['company'];
+        $widget->c = $instance['c'];
         $widget->token = $instance['token'];
         $widget->demo = $instance[ 'demo' ] ? 'true' : 'false';
         $widget->class = $instance['classname'] ? "class='" . $instance['classname'] . "'" : '';
@@ -102,9 +102,25 @@ class DB_WP_Widget extends WP_Widget
 
     // Input form field
     private function inputFormField($label, $field, $var, $domain) {
+
+        $placeholder = '';
+
+        switch($field) {
+            case 'type':
+                $placeholder = 'Widget type';
+            break;
+            case 'token':
+                $placeholder = 'Widget token';
+            break;
+            case 'c':
+                $placeholder = 'Widget c';
+            break;
+            default: $placeholder = $field;
+        }
+
         echo '
             <label for="' . $this->get_field_id($field) . "'>'" . _e($label, $domain) . '"</label>
-            <input type="text" class="mf-input widefat" placeholder="' . ucfirst($field). '" id="' . $this->get_field_id($field) . '" name="' . $this->get_field_name($field) . '"  value="' . esc_attr($var) . '">
+            <input type="text" class="mf-input widefat" placeholder="' . ucfirst($placeholder) . '" id="' . $this->get_field_id($field) . '" name="' . $this->get_field_name($field) . '"  value="' . esc_attr($var) . '">
         ';
     }
 
@@ -121,14 +137,16 @@ class DB_WP_Widget extends WP_Widget
         $locale = empty($instance['locale']) ? $autolocale : $instance['locale'];
 
         $w = array(
-            'name' => isset($instance['name']) ? "name='" . $instance['name'] . "' " : '',
-            'locale' => isset($instance['locale']) ? "'" . $instance['locale'] . "' " : "'" . $autolocale . "' ",
-            'company' => isset($instance['company']) ? "company='" . $instance['company'] . "' " : '',
-            'token' => isset($instance['token']) ? "token='" . $instance['token'] . "' " : '',
-            'demo' => isset($instance['demo']) && $instance['demo'] === 'on' ? "'true'" : "'false'"
+            'type' => isset($instance['type']) && $instance['type'] !== '' ? "type='" . $instance['type'] . "' " : '',
+            'c' => isset($instance['c']) && $instance['c'] !== '' ? "c='" . $instance['c'] . "' " : '',
+            'token' => isset($instance['token']) && $instance['token'] !== '' ? "token='" . $instance['token'] . "' " : '',
+            'locale' => "locale='" .  $locale . "'",
+            'demo' => isset($instance['demo']) && $instance['demo'] === 'on' ? "demo='true'" : '',
         );
 
-        $shortcodeProps = $w['name'] . 'locale=' . "'" . $locale . "' " . $w['company'] . $w['token'] . 'demo=' . $w['demo'];
+        $spacing = $instance['demo'] === 'on' ? ' ' : '';
+
+        $shortcodeProps = $w['type'] . $w['c'] . $w['token'] . $w['locale'] . $spacing . $w['demo'];
 
         ?>
         <div id="mf-form-wrapper" class="mf-form-wrapper">
@@ -139,10 +157,10 @@ class DB_WP_Widget extends WP_Widget
                 <?php _e( 'Datablocks Widget Details' , $this->mfDomain); ?>
             </h3>
             <?php
-                $this->inputFormField('Name (i.e. stock-charts):', 'name', $instance['name'], $this->mfDomain);
+                $this->inputFormField('Widget type (i.e. stock-chart):', 'type', $instance['type'], $this->mfDomain);
+                $this->inputFormField('Widget token (Your token):', 'token', $instance['token'], $this->mfDomain);
+                $this->inputFormField('Widget c (Your company Id):', 'c', $instance['c'], $this->mfDomain);
                 $this->inputFormField('Locale (Detected language: ' . $autolocale . '):', 'locale', $instance['locale'], $this->mfDomain);
-                $this->inputFormField('Company (Your company Id):', 'company', $instance['company'], $this->mfDomain);
-                $this->inputFormField('Token (Your token goes here):', 'token', $instance['token'], $this->mfDomain);
                 $this->inputFormField('Classname: (Optional - Adds a class to this widget parent div):', 'classname', $instance['classname'], $this->mfDomain);
             ?>
             <div class="md-checkbox-label">
@@ -185,13 +203,13 @@ class DB_WP_Widget extends WP_Widget
     public function update($new_instance, $old_instance) {
         $instance = array();
 
-        $instance['classname'] = (!empty($new_instance['classname'])) ? strip_tags($new_instance['classname']) : '';
-        $instance['title'] = (!empty($new_instance['title'])) ? strip_tags($new_instance['title']) : '';
-        $instance['name'] = (!empty($new_instance['name'])) ? strip_tags($new_instance['name']) : '';
-        $instance['locale'] = (!empty($new_instance['locale'])) ? strip_tags($new_instance['locale']) : '';
-        $instance['company'] = (!empty($new_instance['company'])) ? strip_tags($new_instance['company']) : '';
-        $instance['token'] = (!empty($new_instance['token'])) ? strip_tags($new_instance['token']) : '';
-        $instance['demo'] = (!empty($new_instance['demo'])) ? strip_tags($new_instance['demo']) : '';
+        $instance['classname'] = !empty($new_instance['classname']) ? strip_tags($new_instance['classname']) : '';
+        $instance['title'] = !empty($new_instance['title']) ? strip_tags($new_instance['title']) : '';
+        $instance['type'] = !empty($new_instance['type']) ? strip_tags($new_instance['type']) : '';
+        $instance['locale'] = !empty($new_instance['locale']) ? strip_tags($new_instance['locale']) : '';
+        $instance['c'] = !empty($new_instance['c']) ? strip_tags($new_instance['c']) : '';
+        $instance['token'] = !empty($new_instance['token']) ? strip_tags($new_instance['token']) : '';
+        $instance['demo'] = strip_tags($new_instance['demo']);
 
         return $instance;
     }
