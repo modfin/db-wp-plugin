@@ -83,7 +83,7 @@ class DB_WP_Widget extends WP_Widget
         $widget->locale = $instance['locale'];
         $widget->c = $instance['c'];
         $widget->token = $instance['token'];
-        $widget->demo = $instance[ 'demo' ] ? 'true' : 'false';
+        $widget->demo = $instance[ 'demo' ] ? true : false;
         $widget->class = $instance['classname'] ? "class='" . $instance['classname'] . "'" : '';
 
         $this->_inject($widget);
