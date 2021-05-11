@@ -9,8 +9,8 @@
 // Require file for admin panel
 require_once plugin_dir_path(__FILE__) . 'admin/class-db-wp-widget-admin.php';
 
-define("DATABLOCKS_DEFAULT_LOADER_URL", 'https://widget.datablocks.se/api/rose/assets/js/loader-v3.js');
-define("DATABLOCKS_DEFAULT_URL", ' https://widget.datablocks.se/api/rose');
+const DATABLOCKS_DEFAULT_LOADER_URL = 'https://widget.datablocks.se/api/rose/assets/js/loader-v3.js';
+const DATABLOCKS_DEFAULT_URL = ' https://widget.datablocks.se/api/rose';
 
 // Create widget
 class DB_WP_Widget extends WP_Widget
@@ -33,8 +33,8 @@ class DB_WP_Widget extends WP_Widget
     // Inject widget loader
     private function _inject($widget) {
 
-        $loaderURLCurrent = get_option('mfdb_widget_options')['loader_url_option'];
-        $datablocksURLCurrent = get_option('mfdb_widget_options')['datablocks_url_option'];
+        $loaderURLCurrent = get_option('mfdb_widget_options') ?? get_option('mfdb_widget_options')['loader_url_option'];
+        $datablocksURLCurrent = get_option('mfdb_widget_options') ?? get_option('mfdb_widget_options')['datablocks_url_option'];
 
         // If options are not set use default URLs
         $loaderURL = !empty($loaderURLCurrent) ? $loaderURLCurrent : DATABLOCKS_DEFAULT_LOADER_URL;
@@ -71,7 +71,7 @@ class DB_WP_Widget extends WP_Widget
     // Widget frontend
     public function widget($args, $instance)
     {
-        $type = $instance['type'] !== "" ? $instance['type'] : 'mfdb';
+        $type = ($instance['type'] ?? '') !== '' ? $instance['type'] : 'mfdb';
 
         $date = mt_rand(1, time());
         $elementId = "widget-" . $type . "-" . $date;
@@ -79,12 +79,12 @@ class DB_WP_Widget extends WP_Widget
         $widget = new stdClass();
 
         $widget->query = '#' . $elementId;
-        $widget->widget = $instance['type'];
-        $widget->locale = $instance['locale'];
-        $widget->c = $instance['c'];
-        $widget->token = $instance['token'];
-        $widget->demo = $instance[ 'demo' ] ? true : false;
-        $widget->class = $instance['classname'] ? "class='" . $instance['classname'] . "'" : '';
+        $widget->widget = $instance['type'] ?? '';
+        $widget->locale = $instance['locale'] ?? '';
+        $widget->c = $instance['c'] ?? '';
+        $widget->token = $instance['token'] ?? '';
+        $widget->demo = $instance['demo'] ?? false;
+        $widget->class = isset($instance['classname']) ? "class='" . $instance['classname'] . "'" : '';
 
         $this->_inject($widget);
 
@@ -144,24 +144,24 @@ class DB_WP_Widget extends WP_Widget
             'demo' => isset($instance['demo']) && $instance['demo'] === 'on' ? "demo='true'" : '',
         );
 
-        $spacing = $instance['demo'] === 'on' ? ' ' : '';
+        $spacing = isset($instance['demo']) && $instance['demo'] === 'on' ? ' ' : '';
 
         $shortcodeProps = $w['type'] . $w['c'] . $w['token'] . $w['locale'] . $spacing . $w['demo'];
 
         ?>
         <div id="mf-form-wrapper" class="mf-form-wrapper">
             <?php
-                $this->inputFormField('Title:', 'title', $instance['title'], $this->mfDomain);
+                $this->inputFormField('Title:', 'title', $instance['title'] ?? '', $this->mfDomain);
             ?>
             <h3>
                 <?php _e( 'Datablocks Widget Details' , $this->mfDomain); ?>
             </h3>
             <?php
-                $this->inputFormField('Widget type (i.e. stock-chart):', 'type', $instance['type'], $this->mfDomain);
-                $this->inputFormField('Widget token (Your token):', 'token', $instance['token'], $this->mfDomain);
-                $this->inputFormField('Widget c (Your company Id):', 'c', $instance['c'], $this->mfDomain);
-                $this->inputFormField('Locale (Detected language: ' . $autolocale . '):', 'locale', $instance['locale'], $this->mfDomain);
-                $this->inputFormField('Classname: (Optional - Adds a class to this widget parent div):', 'classname', $instance['classname'], $this->mfDomain);
+                $this->inputFormField('Widget type (i.e. stock-chart):', 'type', $instance['type'] ?? '', $this->mfDomain);
+                $this->inputFormField('Widget token (Your token):', 'token', $instance['token'] ?? '', $this->mfDomain);
+                $this->inputFormField('Widget c (Your company Id):', 'c', $instance['c'] ?? '', $this->mfDomain);
+                $this->inputFormField('Locale (Detected language: ' . $autolocale . '):', 'locale', $instance['locale'] ?? '', $this->mfDomain);
+                $this->inputFormField('Classname: (Optional - Adds a class to this widget parent div):', 'classname', $instance['classname'] ?? '', $this->mfDomain);
             ?>
             <div class="md-checkbox-label">
                 <label for="<?php printf($this->get_field_id( 'demo' )); ?>">
