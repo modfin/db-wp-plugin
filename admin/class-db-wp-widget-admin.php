@@ -126,7 +126,7 @@ class DB_WP_Widget_Admin {
 	// Datablocks URL setting callback
 	public function datablocks_url_cb() {
 		echo '
-			<input type="text" class="regular-text ltr" id="datablocks_url_option" placeholder="'. $this->datablocksDefaultURL . '" name="mfdb_widget_options[datablocks_url_option]" value="' . (get_option( 'mfdb_widget_options' ) ?? get_option( 'mfdb_widget_options' )['datablocks_url_option']) . '" />
+			<input type="text" class="regular-text ltr" id="datablocks_url_option" placeholder="'. $this->datablocksDefaultURL . '" name="mfdb_widget_options[datablocks_url_option]" value="' . (get_option( 'mfdb_widget_options' )['datablocks_url_option'] ?? '') . '" />
 			<p class="description" id="loader-url-description">
 				Here you can update the ' . $this->datablocks_url_label . '.
 			</p>
@@ -136,7 +136,7 @@ class DB_WP_Widget_Admin {
 	// Loader URL setting callback
 	public function loader_url_cb() {
 		echo '
-			<input type="text" class="regular-text ltr" id="loader_url_option" placeholder="'. $this->loaderDefaultURL . '" name="mfdb_widget_options[loader_url_option]" value="' . (get_option( 'mfdb_widget_options' ) ?? get_option( 'mfdb_widget_options' )['loader_url_option']) . '" />
+			<input type="text" class="regular-text ltr" id="loader_url_option" placeholder="'. $this->loaderDefaultURL . '" name="mfdb_widget_options[loader_url_option]" value="' . (get_option( 'mfdb_widget_options' )['loader_url_option'] ?? '') . '" />
 			<p class="description" id="loader-url-description">
 				Here you can update the ' . $this->loader_url_label . '.
 			</p>
