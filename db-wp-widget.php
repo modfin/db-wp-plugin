@@ -33,8 +33,8 @@ class DB_WP_Widget extends WP_Widget
     // Inject widget loader
     private function _inject($widget) {
 
-        $loaderURLOption = get_option('mfdb_widget_options')['loader_url_option'];
-        $datablocksURLOption = get_option('mfdb_widget_options')['datablocks_url_option'];
+        $loaderURLOption = get_option('mfdb_widget_options')['loader_url_option'] ?? '';
+        $datablocksURLOption = get_option('mfdb_widget_options')['datablocks_url_option'] ?? '';
 
         // If options are not set use default URLs
         $loaderURL = !empty($loaderURLOption) ? $loaderURLOption : DATABLOCKS_DEFAULT_LOADER_URL;
