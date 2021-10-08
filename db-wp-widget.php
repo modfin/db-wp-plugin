@@ -112,9 +112,6 @@ class DB_WP_Widget extends WP_Widget
             case 'token':
                 $placeholder = 'Widget token';
             break;
-            case 'c':
-                $placeholder = 'Widget c';
-            break;
             default: $placeholder = $field;
         }
 
@@ -159,7 +156,6 @@ class DB_WP_Widget extends WP_Widget
             <?php
                 $this->inputFormField('Widget type (i.e. stock-chart):', 'type', $instance['type'] ?? '', $this->mfDomain);
                 $this->inputFormField('Widget token (Your token):', 'token', $instance['token'] ?? '', $this->mfDomain);
-                $this->inputFormField('Widget c (Your company Id):', 'c', $instance['c'] ?? '', $this->mfDomain);
                 $this->inputFormField('Locale (Detected language: ' . $autolocale . '):', 'locale', $instance['locale'] ?? '', $this->mfDomain);
                 $this->inputFormField('Classname: (Optional - Adds a class to this widget parent div):', 'classname', $instance['classname'] ?? '', $this->mfDomain);
             ?>
@@ -207,9 +203,8 @@ class DB_WP_Widget extends WP_Widget
         $instance['title'] = !empty($new_instance['title']) ? strip_tags($new_instance['title']) : '';
         $instance['type'] = !empty($new_instance['type']) ? strip_tags($new_instance['type']) : '';
         $instance['locale'] = !empty($new_instance['locale']) ? strip_tags($new_instance['locale']) : '';
-        $instance['c'] = !empty($new_instance['c']) ? strip_tags($new_instance['c']) : '';
         $instance['token'] = !empty($new_instance['token']) ? strip_tags($new_instance['token']) : '';
-        $instance['demo'] = strip_tags($new_instance['demo']);
+        $instance['demo'] = !empty($new_instance['demo']) ? strip_tags($new_instance['demo']) : false;
 
         return $instance;
     }
