@@ -7,26 +7,23 @@
 
 class DB_WP_Widget_Admin {
 
-	private $loaderDefaultURL = '';
-	private $datablocksDefaultURL = '';
+	private $loaderVersion = '';
+	private $datablocksURL = '';
 
-	public function __construct(
-		$loaderDefaultURL,
-		$datablocksDefaultURL
-	) {
+	public function __construct() {
 
-        $this->loaderURL = !empty(get_option( 'mfdb_widget_options' )) ? get_option( 'mfdb_widget_options' )['loader_url_option']: '';
-        $this->datablocksURL = !empty(get_option( 'mfdb_widget_options' )) ? get_option( 'mfdb_widget_options' )['datablocks_url_option']: '';
+        $loaderVersionOption = isset(get_option('mfdb_widget_options')['loader_version_option']) && !empty(get_option('mfdb_widget_options')['loader_version_option']) ? get_option('mfdb_widget_options')['loader_version_option'] : DB_DEFAULT_LOADER_VERSION;
+        $datablocksURLOption = isset(get_option('mfdb_widget_options')['datablocks_url_option']) && !empty(get_option('mfdb_widget_options')['datablocks_url_option']) ? get_option('mfdb_widget_options')['datablocks_url_option'] : DB_DEFAULT_URL;
 
-		$this->loaderDefaultURL = $loaderDefaultURL;
-		$this->datablocksDefaultURL = $datablocksDefaultURL;
+        $this->loaderVersion = $loaderVersionOption;
+        $this->datablocksURL = $datablocksURLOption;
 
 		$this->pageTitle = 'MF Datablocks WP Widget';
 		$this->optionsGroup = 'mf_widget_options';
 		$this->pageDesc = 'On this page it is possible to update the URL settings for the ' . $this->pageTitle . '.';
 
 		$this->datablocks_url_label = 'Datablocks URL';
-		$this->loader_url_label = 'JS Loader URL';
+		$this->loader_version_label = 'JS Loader Version';
 
 		add_action( 'admin_menu', array( $this, 'register_mfdb_widget_options_menu' ) );
 		add_action( 'admin_init',  array( $this, 'init_mfdb_widget_options' ) );
@@ -68,13 +65,13 @@ class DB_WP_Widget_Admin {
 							<p>
 								' . $this->datablocks_url_label . '
 								<code>
-									' . $this->datablocksDefaultURL . '
+									' . $this->datablocksURL . '
 								</code>
 							</p>
 							<p>
-								' . $this->loader_url_label . '
+								JS Loader URL
 								<code>
-									' . $this->loaderDefaultURL . '
+									' . $this->datablocksURL . '/assets/js/loader-' . $this->loaderVersion . '.js
 								</code>
 							</p>
 						</td>
@@ -117,9 +114,9 @@ class DB_WP_Widget_Admin {
 		);
 
 		add_settings_field(
-			'url_loader_option',
-			$this->loader_url_label,
-			array( $this, 'loader_url_cb'),
+			'loader_version_option',
+			$this->loader_version_label,
+			array( $this, 'loader_version_cb'),
 			'mfdb_widget_settings_group',
 			'mfdb_widget_setting_section'
 		);
@@ -129,7 +126,7 @@ class DB_WP_Widget_Admin {
 	// Datablocks URL setting callback
 	public function datablocks_url_cb() {
 		echo '
-			<input type="text" class="regular-text ltr" id="datablocks_url_option" placeholder="'. $this->datablocksDefaultURL . '" name="mfdb_widget_options[datablocks_url_option]" value="' . $this->datablocksURL . '" />
+			<input type="text" class="regular-text ltr" id="datablocks_url_option" placeholder="'. $this->datablocksURL . '" name="mfdb_widget_options[datablocks_url_option]" value="' . $this->datablocksURL . '" />
 			<p class="description" id="loader-url-description">
 				Here you can update the ' . $this->datablocks_url_label . '.
 			</p>
@@ -137,11 +134,11 @@ class DB_WP_Widget_Admin {
 	}
 
 	// Loader URL setting callback
-	public function loader_url_cb() {
+	public function loader_version_cb() {
 		echo '
-			<input type="text" class="regular-text ltr" id="loader_url_option" placeholder="'. $this->loaderDefaultURL . '" name="mfdb_widget_options[loader_url_option]" value="' . $this->loaderURL . '" />
-			<p class="description" id="loader-url-description">
-				Here you can update the ' . $this->loader_url_label . '.
+			<input type="text" class="regular-text ltr" id="loader_version_option" placeholder="'. $this->loaderVersion . '" name="mfdb_widget_options[loader_version_option]" value="' . $this->loaderVersion . '" />
+			<p class="description" id="loader-version-description">
+				Here you can update the ' . $this->loader_version_label . '.
 			</p>
 		';
 	}

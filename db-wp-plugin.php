@@ -1,16 +1,25 @@
 <?php
-/*
-    Plugin Name: MF Datablocks WP Widget
-    Description: Enables integration of Modular Finance Datablocks&trade;
-    widgets to your site's sections and pages.
-    Author: Alexander Forrest // Modular Finance
-*/
+/**
+ * @link              https://github.com/modfin/db-wp-plugin
+ * @since             1.0.0
+ * @package           Db_Wp_Plugin
+ *
+ * @wordpress-plugin
+ * Plugin Name:       MF Datablocks WP Widget
+ * Plugin URI:        https://github.com/modfin/mfn-wp-plugin
+ * Description:       Enables integration of Modular Finance Datablocks&trade;
+ * Version:           0.0.8
+ * Author:            Alexander Forrest // Modular Finance
+ * Author URI:        https://github.com/abulerforrest
+ * License:           GPL-2.0+
+ * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:       db-wp-plugin
+ * Domain Path:       /languages
+ */
 
 // Require file for admin panel
+require_once plugin_dir_path(__FILE__) . 'consts.php';
 require_once plugin_dir_path(__FILE__) . 'admin/class-db-wp-widget-admin.php';
-
-const DATABLOCKS_DEFAULT_LOADER_URL = 'https://widget.datablocks.se/api/rose/assets/js/loader-v3.js';
-const DATABLOCKS_DEFAULT_URL = ' https://widget.datablocks.se/api/rose';
 
 // Create widget
 class DB_WP_Widget extends WP_Widget
@@ -33,12 +42,14 @@ class DB_WP_Widget extends WP_Widget
     // Inject widget loader
     private function _inject($widget) {
 
-        $loaderURLOption = get_option('mfdb_widget_options')['loader_url_option'] ?? '';
+        $loaderVersionOption = get_option('mfdb_widget_options')['loader_version_option'] ?? '';
         $datablocksURLOption = get_option('mfdb_widget_options')['datablocks_url_option'] ?? '';
 
+        $loaderVersion = isset($loaderVersionOption) && !empty($loaderVersionOption) ? $loaderVersionOption : DB_DEFAULT_LOADER_VERSION;
+
         // If options are not set use default URLs
-        $loaderURL = !empty($loaderURLOption) ? $loaderURLOption : DATABLOCKS_DEFAULT_LOADER_URL;
-        $datablocksURL = !empty($datablocksURLOption) ? $datablocksURLOption : DATABLOCKS_DEFAULT_URL;
+        $loaderURL = isset($loaderURLOption) && !empty($loaderURLOption) ? $loaderURLOption : DB_DEFAULT_URL . '/assets/js/loader-' . $loaderVersion . '.js';
+        $datablocksURL = isset($datablocksURLOption) && !empty($datablocksURLOption) ? $datablocksURLOption : DB_DEFAULT_URL;
 
         echo '
         <script>
@@ -83,7 +94,7 @@ class DB_WP_Widget extends WP_Widget
         $widget->locale = $instance['locale'] ?? '';
         $widget->c = $instance['c'] ?? '';
         $widget->token = $instance['token'] ?? '';
-        $widget->demo = filter_var($instance['demo'], FILTER_VALIDATE_BOOLEAN) ?? false;
+        $widget->demo = $instance['demo'] ?? false;
         $widget->class = isset($instance['classname']) ? "class='" . $instance['classname'] . "'" : '';
 
         $this->_inject($widget);
@@ -244,9 +255,9 @@ if ( is_admin() ) {
 
     new DB_WP_Widget_Admin (
         // Default Loader URL
-        DATABLOCKS_DEFAULT_LOADER_URL,
+        DB_DEFAULT_URL . '/assets/js/loader-"' . DB_DEFAULT_LOADER_VERSION . '".js',
         // Default Datablocks URL
-        DATABLOCKS_DEFAULT_URL
+        DB_DEFAULT_URL
     );
 
 }
