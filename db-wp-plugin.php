@@ -8,7 +8,7 @@
  * Plugin Name:       MF Datablocks WP Widget
  * Plugin URI:        https://github.com/modfin/mfn-wp-plugin
  * Description:       Enables integration of Modular Finance Datablocks&trade;
- * Version:           0.0.9
+ * Version:           0.0.10
  * Author:            Alexander Forrest // Modular Finance
  * Author URI:        https://github.com/abulerforrest
  * License:           GPL-2.0+
