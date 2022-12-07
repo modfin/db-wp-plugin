@@ -97,8 +97,6 @@ class DB_WP_Widget extends WP_Widget
         $widget->demo = $instance['demo'] ?? false;
         $widget->class = isset($instance['classname']) ? "class='" . $instance['classname'] . "'" : '';
 
-        $this->_inject($widget);
-
         echo $args['before_widget'];
 
         // If title is set - display the title
@@ -107,6 +105,8 @@ class DB_WP_Widget extends WP_Widget
         }
 
         echo "<div id='" . $elementId . "'" . $widget->class . "></div>";
+
+        $this->_inject($widget);
 
         echo $args['after_widget'];
     }
